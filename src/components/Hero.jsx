@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 export default function Hero() {
   return (
     <section className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-100 flex items-center">
@@ -20,14 +21,22 @@ export default function Hero() {
           </p>
 
           <div className="mt-8 flex gap-4 flex-wrap">
-            <button className="px-6 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold shadow-lg hover:scale-105 transition">
-              Get Started
-            </button>
 
-            <button className="px-6 py-3 rounded-xl border border-gray-300 bg-white hover:bg-gray-100 transition">
-              Watch Demo
-            </button>
-          </div>
+  <Link
+    to="/register"
+    className="px-6 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold shadow-lg hover:scale-105 transition"
+  >
+    Get Started
+  </Link>
+
+  <a
+    href="#features"
+    className="px-6 py-3 rounded-xl border border-gray-300 bg-white hover:bg-gray-100 transition"
+  >
+    Watch Demo
+  </a>
+
+</div>
         </div>
 
         {/* Right Side */}

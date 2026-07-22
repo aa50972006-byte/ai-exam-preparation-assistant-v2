@@ -9,11 +9,24 @@ export default function LandingPage() {
   return (
     <>
       <Navbar />
+
       <Hero />
-      <Features />
-      <WhyChooseUs />
-      <CTA />
-      <Footer />
+
+      <section id="features">
+        <Features />
+      </section>
+
+      <section id="why-choose-us">
+        <WhyChooseUs />
+      </section>
+
+      <section id="how-it-works">
+  <CTA />
+</section>
+
+      <section id="contact">
+        <Footer />
+      </section>
     </>
   );
 }
