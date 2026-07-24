@@ -2,6 +2,7 @@ import { useState } from "react";
 import { askGemini } from "../services/gemini";
 import { updateProgress } from "../services/progress";
 import { saveHistory } from "../services/history";
+import { exportToPDF } from "../utils/pdfExport";
 
 export default function AIChat() {
 
@@ -9,44 +10,40 @@ export default function AIChat() {
   const [answer, setAnswer] = useState("");
   const [loading, setLoading] = useState(false);
 
-
   const handleAsk = async () => {
 
-    if (!question.trim()) return;
-
+    if (!question.trim()) {
+      alert("Please enter a question.");
+      return;
+    }
 
     setLoading(true);
-
+    setAnswer("");
 
     try {
 
       const response = await askGemini(question);
 
+      await updateProgress("Aiquestions");
 
-      // Update Firebase progress
-      await updateProgress("aiQuestions");
       await saveHistory(
-  "🤖 AI",
-  `Asked AI about "${question}"`
-);
-
+        "🤖 AI",
+        `Asked AI about "${question}"`
+      );
 
       setAnswer(response);
-
 
     } catch (error) {
 
       console.error(error);
 
-      setAnswer("Something went wrong. Please try again.");
+      setAnswer("❌ Something went wrong. Please try again.");
 
     }
-
 
     setLoading(false);
 
   };
-
 
   return (
 
@@ -54,45 +51,50 @@ export default function AIChat() {
 
       <div className="max-w-4xl mx-auto bg-white shadow-xl rounded-2xl p-8">
 
-
         <h1 className="text-3xl font-bold mb-6 text-blue-600">
           🤖 AI Study Assistant
         </h1>
 
-
         <textarea
           rows="6"
           value={question}
-          onChange={(e)=>setQuestion(e.target.value)}
+          onChange={(e) => setQuestion(e.target.value)}
           placeholder="Ask anything about your studies..."
           className="w-full border rounded-xl p-4"
         />
 
-
         <button
-
           onClick={handleAsk}
-
           className="mt-4 bg-blue-600 text-white px-6 py-3 rounded-xl hover:bg-blue-700"
-
         >
-
           {loading ? "Thinking..." : "Ask AI"}
-
         </button>
 
+        {answer && (
 
+          <div className="mt-8 border rounded-xl p-5 bg-gray-50 whitespace-pre-wrap">
 
-        <div className="mt-8 border rounded-xl p-5 bg-gray-50 min-h-[150px] whitespace-pre-wrap">
+            <h2 className="text-xl font-bold mb-4">
+              AI Response
+            </h2>
 
-          {loading ? "Thinking..." : answer}
+            {answer}
 
-        </div>
+            <button
+              onClick={() => exportToPDF("AI Answer", answer)}
+              className="mt-6 bg-green-600 text-white px-6 py-3 rounded-xl hover:bg-green-700"
+            >
+              📥 Download Answer as PDF
+            </button>
 
+          </div>
+
+        )}
 
       </div>
 
     </div>
 
   );
+
 }

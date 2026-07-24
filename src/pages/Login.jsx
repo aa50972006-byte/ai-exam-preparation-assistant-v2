@@ -23,8 +23,12 @@ export default function Login() {
 
       navigate("/dashboard");
     } catch (error) {
-      alert(error.message);
-    }
+  console.log("Firebase Error:", error);
+  console.log("Code:", error.code);
+  console.log("Message:", error.message);
+
+  alert(`${error.code}\n${error.message}`);
+}
   };
 
   // Google Login

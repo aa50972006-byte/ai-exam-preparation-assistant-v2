@@ -1,6 +1,11 @@
 import { db, auth } from "../firebase";
-import { doc, getDoc, setDoc, updateDoc, increment } from "firebase/firestore";
-
+import {
+  doc,
+  getDoc,
+  setDoc,
+  updateDoc,
+  increment
+} from "firebase/firestore";
 
 export async function updateProgress(field) {
 
@@ -8,24 +13,25 @@ export async function updateProgress(field) {
 
   if (!user) return;
 
-
   const userRef = doc(db, "userProgress", user.uid);
 
-
   const snapshot = await getDoc(userRef);
-
 
   if (!snapshot.exists()) {
 
     await setDoc(userRef, {
-      quizzes: 0,
-      summaries: 0,
-      flashcards: 0,
-      aiQuestions: 0,
+
+      Quizzes: 0,
+
+      Flashcards: 0,
+
+      Summaries: 0,
+
+      Aiquestions: 0
+
     });
 
   }
-
 
   await updateDoc(userRef, {
 

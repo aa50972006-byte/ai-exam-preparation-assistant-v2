@@ -9,20 +9,35 @@ import { auth } from "../firebase";
 import { signOut } from "firebase/auth";
 
 export default function Dashboard() {
+
   const navigate = useNavigate();
 
   const handleLogout = async () => {
-    await signOut(auth);
-    navigate("/login");
+
+    try {
+
+      await signOut(auth);
+
+      navigate("/login");
+
+    } catch (error) {
+
+      console.error("Logout Error:", error);
+
+    }
+
   };
 
   return (
+
     <div className="flex min-h-screen bg-gray-100">
+
       <Sidebar />
 
       <main className="flex-1 p-8">
 
         {/* Top Buttons */}
+
         <div className="flex justify-end gap-4 mb-6">
 
           <Link
@@ -41,12 +56,20 @@ export default function Dashboard() {
 
         </div>
 
+        {/* Dashboard Components */}
+
         <WelcomeCard />
+
         <StatsCards />
+
         <AITools />
+
         <RecentActivity />
 
       </main>
+
     </div>
+
   );
+
 }

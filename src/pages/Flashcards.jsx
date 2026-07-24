@@ -2,6 +2,7 @@ import { useState } from "react";
 import { askGemini } from "../services/gemini";
 import { updateProgress } from "../services/progress";
 import { saveHistory } from "../services/history";
+import { exportToPDF } from "../utils/pdfExport";
 
 export default function Flashcards() {
 
@@ -11,9 +12,13 @@ export default function Flashcards() {
 
   const generateFlashcards = async () => {
 
-    if (!topic.trim()) return;
+    if (!topic.trim()) {
+      alert("Please enter a topic.");
+      return;
+    }
 
     setLoading(true);
+    setFlashcards("");
 
     try {
 
@@ -37,12 +42,12 @@ Make answers short and easy for exam preparation.
 
       const result = await askGemini(prompt);
 
-      // Update Firebase Progress
-      await updateProgress("flashcards");
+      await updateProgress("Flashcards");
+
       await saveHistory(
-  "🧠 Flashcards",
-  `Created flashcards for "${topic}"`
-);
+        "🧠 Flashcards",
+        `Created flashcards for "${topic}"`
+      );
 
       setFlashcards(result);
 
@@ -50,7 +55,7 @@ Make answers short and easy for exam preparation.
 
       console.error(error);
 
-      setFlashcards("Failed to generate flashcards. Please try again.");
+      setFlashcards("❌ Failed to generate flashcards.");
 
     }
 
@@ -84,6 +89,7 @@ Make answers short and easy for exam preparation.
         </button>
 
         {flashcards && (
+
           <div className="mt-8 bg-gray-100 rounded-xl p-6 whitespace-pre-wrap">
 
             <h2 className="text-xl font-bold mb-4">
@@ -92,7 +98,15 @@ Make answers short and easy for exam preparation.
 
             {flashcards}
 
+            <button
+              onClick={() => exportToPDF("Flashcards", flashcards)}
+              className="mt-6 bg-green-600 text-white px-6 py-3 rounded-xl hover:bg-green-700"
+            >
+              📥 Download Flashcards as PDF
+            </button>
+
           </div>
+
         )}
 
       </div>

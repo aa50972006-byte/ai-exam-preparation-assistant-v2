@@ -1,31 +1,31 @@
+import { useState } from "react";
 import { auth } from "../firebase";
 import {
+  updatePassword,
   signOut,
-  sendPasswordResetEmail,
 } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 
 export default function Settings() {
 
+  const [password, setPassword] = useState("");
+
   const navigate = useNavigate();
 
-  const user = auth.currentUser;
+  const handleChangePassword = async () => {
 
-  const handleLogout = async () => {
-    await signOut(auth);
-    alert("Logged out successfully!");
-    navigate("/login");
-  };
-
-  const handleResetPassword = async () => {
-
-    if (!user?.email) return;
+    if (password.length < 6) {
+      alert("Password must be at least 6 characters.");
+      return;
+    }
 
     try {
 
-      await sendPasswordResetEmail(auth, user.email);
+      await updatePassword(auth.currentUser, password);
 
-      alert("Password reset email has been sent.");
+      alert("Password updated successfully!");
+
+      setPassword("");
 
     } catch (error) {
 
@@ -35,50 +35,74 @@ export default function Settings() {
 
   };
 
+  const handleLogout = async () => {
+
+    await signOut(auth);
+
+    navigate("/login");
+
+  };
+
   return (
 
     <div className="min-h-screen bg-gray-100 p-10">
 
-      <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden">
+      <div className="max-w-2xl mx-auto bg-white rounded-2xl shadow-xl p-8">
 
-        <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-8">
+        <h1 className="text-4xl font-bold mb-8 text-blue-600">
 
-          <h1 className="text-4xl font-bold">
-            ⚙️ Settings
-          </h1>
+          ⚙️ Settings
 
-          <p className="mt-2 text-blue-100">
-            Manage your account preferences
-          </p>
+        </h1>
 
-        </div>
+        <div className="mb-8">
 
-        <div className="p-8 space-y-6">
+          <h2 className="text-xl font-semibold mb-2">
 
-          <div className="bg-gray-100 rounded-xl p-5">
+            Logged in Email
 
-            <h2 className="text-xl font-bold mb-2">
-              👤 Account Information
-            </h2>
+          </h2>
 
-            <p>
-              <strong>Email:</strong> {user?.email}
-            </p>
+          <div className="bg-gray-100 p-4 rounded-xl">
+
+            {auth.currentUser?.email}
 
           </div>
 
+        </div>
+
+        <div className="mb-8">
+
+          <h2 className="text-xl font-semibold mb-3">
+
+            Change Password
+
+          </h2>
+
+          <input
+            type="password"
+            placeholder="Enter new password"
+            value={password}
+            onChange={(e)=>setPassword(e.target.value)}
+            className="w-full border rounded-xl p-4"
+          />
+
           <button
-            onClick={handleResetPassword}
-            className="w-full bg-blue-600 text-white py-3 rounded-xl hover:bg-blue-700 transition"
+            onClick={handleChangePassword}
+            className="mt-4 bg-blue-600 text-white px-6 py-3 rounded-xl hover:bg-blue-700"
           >
-            🔑 Reset Password
+            Update Password
           </button>
+
+        </div>
+
+        <div>
 
           <button
             onClick={handleLogout}
-            className="w-full bg-red-600 text-white py-3 rounded-xl hover:bg-red-700 transition"
+            className="w-full bg-red-500 text-white py-3 rounded-xl hover:bg-red-600"
           >
-            🚪 Logout
+            Logout
           </button>
 
         </div>

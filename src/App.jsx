@@ -41,7 +41,14 @@ function App() {
   }
 />
         <Route path="/ask-ai" element={<AskAI />} />
-        <Route path="/quiz-generator" element={<QuizGenerator />} />
+        <Route
+  path="/quiz-generator"
+  element={
+    <ProtectedRoute>
+      <QuizGenerator />
+    </ProtectedRoute>
+  }
+/>
         <Route path="/pdf-summarizer" element={<PdfSummarizer />} />
         <Route path="/study-planner" element={<StudyPlanner />} />
         <Route path="/flashcards" element={<Flashcards />} />
