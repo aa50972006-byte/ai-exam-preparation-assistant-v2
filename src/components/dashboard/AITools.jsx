@@ -4,7 +4,7 @@ const tools = [
     icon: "🤖",
     title: "Ask AI",
     description: "Ask any study-related question.",
-    route: "/ask-ai"
+    route: "/ai-chat"
   },
   {
     icon: "📄",

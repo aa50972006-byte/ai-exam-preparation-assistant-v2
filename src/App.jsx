@@ -11,6 +11,8 @@ import Flashcards from "./pages/Flashcards";
 import Progress from "./pages/Progress";
 import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
+import ProtectedRoute from "./components/ProtectedRoute";
+import AIChat from "./pages/AIChat";
 function App() {
   return (
     <BrowserRouter>
@@ -21,8 +23,23 @@ function App() {
         <Route path="/login" element={<Login />} />
 
         <Route path="/register" element={<Register />} />
+        <Route
+  path="/ai-chat"
+  element={
+    <ProtectedRoute>
+      <AIChat />
+    </ProtectedRoute>
+  }
+/>
 
-        <Route path="/dashboard" element={<Dashboard />} />
+       <Route
+  path="/dashboard"
+  element={
+    <ProtectedRoute>
+      <Dashboard />
+    </ProtectedRoute>
+  }
+/>
         <Route path="/ask-ai" element={<AskAI />} />
         <Route path="/quiz-generator" element={<QuizGenerator />} />
         <Route path="/pdf-summarizer" element={<PdfSummarizer />} />

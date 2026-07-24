@@ -1,35 +1,83 @@
-const stats = [
-  {
-    title: "Uploaded Notes",
-    value: "12",
-    icon: "📄",
-    color: "bg-blue-500",
-  },
-  {
-    title: "Quizzes",
-    value: "28",
-    icon: "📝",
-    color: "bg-green-500",
-  },
-  {
-    title: "Flashcards",
-    value: "145",
-    icon: "🧠",
-    color: "bg-purple-500",
-  },
-  {
-    title: "Study Progress",
-    value: "82%",
-    icon: "🎯",
-    color: "bg-orange-500",
-  },
-];
+import { useEffect, useState } from "react";
+import { auth, db } from "../../firebase";
+import { doc, getDoc } from "firebase/firestore";
 
 export default function StatsCards() {
+
+  const [stats, setStats] = useState({
+    quizzes: 0,
+    summaries: 0,
+    flashcards: 0,
+    aiQuestions: 0,
+  });
+
+  useEffect(() => {
+
+    async function loadStats() {
+
+      const user = auth.currentUser;
+
+      if (!user) return;
+
+      const docRef = doc(db, "userProgress", user.uid);
+
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        setStats(docSnap.data());
+      }
+
+    }
+
+    loadStats();
+
+  }, []);
+
+  const total =
+    stats.quizzes +
+    stats.summaries +
+    stats.flashcards +
+    stats.aiQuestions;
+
+  const percentage = Math.min(total * 5, 100);
+
+  const cards = [
+
+    {
+      title: "AI Questions",
+      value: stats.aiQuestions,
+      icon: "🤖",
+      color: "bg-blue-500",
+    },
+
+    {
+      title: "Quizzes",
+      value: stats.quizzes,
+      icon: "📝",
+      color: "bg-green-500",
+    },
+
+    {
+      title: "Flashcards",
+      value: stats.flashcards,
+      icon: "🧠",
+      color: "bg-purple-500",
+    },
+
+    {
+      title: "Study Progress",
+      value: `${percentage}%`,
+      icon: "🎯",
+      color: "bg-orange-500",
+    },
+
+  ];
+
   return (
+
     <div className="grid md:grid-cols-2 xl:grid-cols-4 gap-6 mt-8">
 
-      {stats.map((item, index) => (
+      {cards.map((item, index) => (
 
         <div
           key={index}
@@ -55,5 +103,7 @@ export default function StatsCards() {
       ))}
 
     </div>
+
   );
+
 }

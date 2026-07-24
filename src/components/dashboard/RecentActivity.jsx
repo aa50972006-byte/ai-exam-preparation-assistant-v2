@@ -1,28 +1,56 @@
-const activities = [
-  {
-    title: "Uploaded Operating System Notes",
-    time: "2 hours ago",
-    icon: "📄",
-  },
-  {
-    title: "Generated Compiler Quiz",
-    time: "Yesterday",
-    icon: "📝",
-  },
-  {
-    title: "Created AI Flashcards",
-    time: "2 days ago",
-    icon: "🧠",
-  },
-  {
-    title: "Asked AI about DSA",
-    time: "3 days ago",
-    icon: "🤖",
-  },
-];
+import { useEffect, useState } from "react";
+import { auth, db } from "../../firebase";
+import {
+  collection,
+  getDocs,
+  query,
+  orderBy,
+  limit,
+} from "firebase/firestore";
 
 export default function RecentActivity() {
+
+  const [activities, setActivities] = useState([]);
+
+  useEffect(() => {
+
+    async function loadHistory() {
+
+      const user = auth.currentUser;
+
+      if (!user) return;
+
+      try {
+
+        const q = query(
+          collection(db, "users", user.uid, "history"),
+          orderBy("createdAt", "desc"),
+          limit(5)
+        );
+
+        const snapshot = await getDocs(q);
+
+        const history = snapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+
+        setActivities(history);
+
+      } catch (error) {
+
+        console.error(error);
+
+      }
+
+    }
+
+    loadHistory();
+
+  }, []);
+
   return (
+
     <div className="mt-10">
 
       <h2 className="text-3xl font-bold mb-6">
@@ -31,39 +59,51 @@ export default function RecentActivity() {
 
       <div className="bg-white rounded-2xl shadow-lg">
 
-        {activities.map((activity, index) => (
+        {activities.length === 0 ? (
 
-          <div
-            key={index}
-            className="flex items-center justify-between p-5 border-b last:border-none hover:bg-gray-50 transition"
-          >
+          <div className="p-6 text-center text-gray-500">
+            No recent activity yet.
+          </div>
 
-            <div className="flex items-center gap-4">
+        ) : (
 
-              <div className="text-3xl">
-                {activity.icon}
-              </div>
+          activities.map((activity) => (
 
-              <div>
+            <div
+              key={activity.id}
+              className="flex items-center justify-between p-5 border-b last:border-none hover:bg-gray-50 transition"
+            >
 
-                <h3 className="font-semibold">
-                  {activity.title}
-                </h3>
+              <div className="flex items-center gap-4">
 
-                <p className="text-gray-500 text-sm">
-                  {activity.time}
-                </p>
+                <div className="text-3xl">
+                  {activity.type}
+                </div>
+
+                <div>
+
+                  <h3 className="font-semibold">
+                    {activity.title}
+                  </h3>
+
+                  <p className="text-gray-500 text-sm">
+                    {activity.createdAt?.toDate().toLocaleString() || "Just now"}
+                  </p>
+
+                </div>
 
               </div>
 
             </div>
 
-          </div>
+          ))
 
-        ))}
+        )}
 
       </div>
 
     </div>
+
   );
+
 }

@@ -7,7 +7,7 @@ export default function WelcomeCard() {
       </h1>
 
       <p className="mt-4 text-blue-100 text-lg">
-        Ready to continue your exam preparation?
+        Your AI-powered learning dashboard is ready.
       </p>
 
       <div className="flex gap-4 mt-8 flex-wrap">
