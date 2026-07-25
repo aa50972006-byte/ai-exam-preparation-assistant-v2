@@ -1,23 +1,53 @@
-# AI Exam Preparation Assistant
+# 🎓 AI Exam Preparation Assistant
 
-An AI-powered exam preparation application for university students.
+An AI-powered web application that helps university students prepare for exams using Google's Gemini AI.
 
-## Features
+## 🚀 Live Demo
 
-- AI-powered study assistant
-- Upload notes and PDFs
-- Generate quizzes
-- Create flashcards
-- Study planner
-- Modern responsive interface built with React and Tailwind CSS
+https://ai-exam-preparation-assistant-v2-lake.vercel.app
 
-## Technologies Used
+## 📂 GitHub Repository
 
-- React
+https://github.com/aa50972006-byte/ai-exam-preparation-assistant-v2
+
+## ✨ Features
+
+- 🤖 AI Study Assistant
+- 📝 AI Quiz Generator
+- 🧠 AI Flashcards
+- 📄 AI PDF Summarizer
+- 📅 Study Planner
+- 📊 Progress Dashboard
+- 👤 User Profile
+- 📥 Export Quiz/Notes as PDF
+- 🔐 Firebase Authentication
+- ☁️ Cloud Firestore Database
+
+## 🛠 Tech Stack
+
+- React.js
 - Vite
 - Tailwind CSS
-- Git & GitHub
+- Firebase Authentication
+- Cloud Firestore
+- Gemini AI API
+- PDF.js
+- jsPDF
+- Vercel
 
-## Status
+## Installation
 
-🚧 Project is currently under development.
+```bash
+npm install
+npm run dev
+```
+
+## Build
+
+```bash
+npm run build
+```
+
+## Author
+
+Ahmad Hassan
